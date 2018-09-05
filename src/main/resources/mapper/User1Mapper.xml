@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<!-- 特别注意事项:mapper的namespace必须和项目下的com.gonna.dao的一致 -->
+<mapper namespace="com.gonna.dao.User1Mapper" >
+  <resultMap id="BaseResultMap" type="com.gonna.domain.User1" >
+    <id column="sid" property="sid" jdbcType="INTEGER" />
+    <result column="susername" property="susername" jdbcType="VARCHAR" />
+    <result column="spassword" property="spassword" jdbcType="VARCHAR" />
+    <result column="saddress" property="saddress" jdbcType="INTEGER" />
+    <result column="cid" property="cid" jdbcType="INTEGER" />
+    <result column="sage" property="sage" jdbcType="INTEGER" />
+    <result column="ssex" property="ssex" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    sid, susername, spassword, saddress, cid, sage, ssex
+  </sql>
+  
+  <!-- 每一个增删改查的标签id必须和com.gonna.dao里的方法一致 -->
+  <select id="selectUsers" resultMap="BaseResultMap">
+  	select 
+    <include refid="Base_Column_List" />
+    from user1
+  </select>
+  
+  
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from user1
+    where sid = #{sid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from user1
+    where sid = #{sid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.gonna.domain.User1" >
+    insert into user1 (sid, susername, spassword, 
+      saddress, cid, sage, 
+      ssex)
+    values (#{sid,jdbcType=INTEGER}, #{susername,jdbcType=VARCHAR}, #{spassword,jdbcType=VARCHAR}, 
+      #{saddress,jdbcType=INTEGER}, #{cid,jdbcType=INTEGER}, #{sage,jdbcType=INTEGER}, 
+      #{ssex,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.gonna.domain.User1" >
+    insert into user1
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="sid != null" >
+        sid,
+      </if>
+      <if test="susername != null" >
+        susername,
+      </if>
+      <if test="spassword != null" >
+        spassword,
+      </if>
+      <if test="saddress != null" >
+        saddress,
+      </if>
+      <if test="cid != null" >
+        cid,
+      </if>
+      <if test="sage != null" >
+        sage,
+      </if>
+      <if test="ssex != null" >
+        ssex,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="sid != null" >
+        #{sid,jdbcType=INTEGER},
+      </if>
+      <if test="susername != null" >
+        #{susername,jdbcType=VARCHAR},
+      </if>
+      <if test="spassword != null" >
+        #{spassword,jdbcType=VARCHAR},
+      </if>
+      <if test="saddress != null" >
+        #{saddress,jdbcType=INTEGER},
+      </if>
+      <if test="cid != null" >
+        #{cid,jdbcType=INTEGER},
+      </if>
+      <if test="sage != null" >
+        #{sage,jdbcType=INTEGER},
+      </if>
+      <if test="ssex != null" >
+        #{ssex,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.gonna.domain.User1" >
+    update user1
+    <set >
+      <if test="susername != null" >
+        susername = #{susername,jdbcType=VARCHAR},
+      </if>
+      <if test="spassword != null" >
+        spassword = #{spassword,jdbcType=VARCHAR},
+      </if>
+      <if test="saddress != null" >
+        saddress = #{saddress,jdbcType=INTEGER},
+      </if>
+      <if test="cid != null" >
+        cid = #{cid,jdbcType=INTEGER},
+      </if>
+      <if test="sage != null" >
+        sage = #{sage,jdbcType=INTEGER},
+      </if>
+      <if test="ssex != null" >
+        ssex = #{ssex,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where sid = #{sid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.gonna.domain.User1" >
+    update user1
+    set susername = #{susername,jdbcType=VARCHAR},
+      spassword = #{spassword,jdbcType=VARCHAR},
+      saddress = #{saddress,jdbcType=INTEGER},
+      cid = #{cid,jdbcType=INTEGER},
+      sage = #{sage,jdbcType=INTEGER},
+      ssex = #{ssex,jdbcType=VARCHAR}
+    where sid = #{sid,jdbcType=INTEGER}
+  </update>
+</mapper>

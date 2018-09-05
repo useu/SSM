@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns="http://java.sun.com/xml/ns/javaee" 
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" 
+	id="WebApp_ID" version="2.5">
+
+	<welcome-file-list>
+		<welcome-file>index.jsp</welcome-file>
+	</welcome-file-list>
+
+ <!-- 配置spring启动加载:ContextLoaderListener-->
+  <!-- needed for ContextLoaderListener -->
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>classpath:applicationContext.xml</param-value>
+	</context-param>
+
+	<!-- Bootstraps the root web application context before servlet initialization -->
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	
+	
+	
+	<!-- 配置springmvc启动项:DispatcherServlet -->
+	<!-- The front controller of this Spring Web application, responsible for handling all application requests -->
+	<servlet>
+		<servlet-name>spring</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>classpath:spring-servlet.xml</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<!-- Map all requests to the DispatcherServlet for handling -->
+	<servlet-mapping>
+		<servlet-name>spring</servlet-name>
+		<url-pattern>/</url-pattern><!-- 拦截所有请求 -->
+	</servlet-mapping>
+	
+	
+	<!-- 编码集的过滤器:ChsaracterEncodingFilter-->
+	<!--  注:此过滤器一定在所有过滤器的最前面 -->
+	<!-- 复制CharacterEncodingFilter之后Ctrl+Shift+T自动找到源码
+		  在class后的CharacterEncodingFilter处右键
+		  Copy Qualified Name到这里的 <filter-class>
+		  再将类里的三个成员变量分别指定编码集encoding、forceRequestEncoding、forceResponseEncoding-->
+	<filter>
+		<filter-name>CharacterEncodingFilter</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>UTF-8</param-value>
+		</init-param>
+		
+		<init-param>
+			<param-name>forceRequestEncoding</param-name>
+			<param-value>true</param-value>
+		</init-param>
+		
+		<init-param>
+			<param-name>forceResponseEncoding</param-name>
+			<param-value>true</param-value>
+		</init-param>
+	</filter>
+	
+	<filter-mapping>
+		<filter-name>CharacterEncodingFilter</filter-name>
+		<url-pattern>/*</url-pattern><!-- 拦截所有请求 -->
+	</filter-mapping>
+
+
+	<!--配置基于rest风格url的过滤器 : HiddenHttpMethodFilter-->
+	<!-- 操作同上 -->
+	<filter>
+		<filter-name>HiddenHttpMethodFilter</filter-name>
+		<filter-class>org.springframework.web.filter.HiddenHttpMethodFilter</filter-class>
+	</filter>	
+	
+	<filter-mapping>
+		<filter-name>HiddenHttpMethodFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+</web-app>

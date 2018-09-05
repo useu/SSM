@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gonna.dao.ParentsMapper" >
+  <resultMap id="BaseResultMap" type="com.gonna.domain.Parents" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="fname" property="fname" jdbcType="VARCHAR" />
+    <result column="mname" property="mname" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, fname, mname
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from parents
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from parents
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.gonna.domain.Parents" >
+    insert into parents (id, fname, mname
+      )
+    values (#{id,jdbcType=INTEGER}, #{fname,jdbcType=VARCHAR}, #{mname,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.gonna.domain.Parents" >
+    insert into parents
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="fname != null" >
+        fname,
+      </if>
+      <if test="mname != null" >
+        mname,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="fname != null" >
+        #{fname,jdbcType=VARCHAR},
+      </if>
+      <if test="mname != null" >
+        #{mname,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.gonna.domain.Parents" >
+    update parents
+    <set >
+      <if test="fname != null" >
+        fname = #{fname,jdbcType=VARCHAR},
+      </if>
+      <if test="mname != null" >
+        mname = #{mname,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.gonna.domain.Parents" >
+    update parents
+    set fname = #{fname,jdbcType=VARCHAR},
+      mname = #{mname,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

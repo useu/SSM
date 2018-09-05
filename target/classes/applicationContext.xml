@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
+		http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring-1.2.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+
+
+
+	<!-- 首先看我们把什么看成组件,controller/service/dao都是,controller扫描过,则另外两个在此处扫描 -->
+	<context:component-scan base-package="com.gonna">
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+	</context:component-scan>
+
+
+
+	<!-- 引入jdbc属性文件 -->
+	<context:property-placeholder location="classpath:db.properties"/>
+	
+	
+	
+	<!-- 配置数据库的连接池:ComboPooledDataSource  自带的连接池,直接用 -->
+	<!-- 使用c3p0连接池创建连接 -->
+	<!-- 在mybatis中,#{},和${}的区别 -->
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+		<!-- 管理数据库的基本连接信息     property是类里的成员变量-->
+		<property name="driverClass" value="${jdbc.driver}"></property>
+		<property name="jdbcUrl" value="${jdbc.url}"></property>
+		<property name="user" value="${jdbc.user}"></property>
+		<property name="password" value="${jdbc.password}"></property>
+	</bean>
+	
+	
+	
+	<!-- 配置mybatis-->
+	<!-- 1.SqlSessionFactoryBean -->
+	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<!-- Configuration 指定mybaits配置文件路径 -->
+		<property name="configLocation" value="classpath:config.xml"></property>
+		<!-- mybatis的配置文件里没有写任何连接数据库的信息,所以在这里把数据库引进来 -->
+		<property name="dataSource" ref="dataSource"></property>
+		<!-- 配置mapper扫描        文件路径:java时用. 其他所有文件用/  *.xml:扫描这个包下的所有xml-->
+		<property name="mapperLocations" value="classpath:mapper/*.xml"></property>
+	</bean>
+	
+	
+	
+	<!-- mybatis和spring的整合 -->
+	<bean id="" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.gonna.dao"></property>
+	</bean>
+	
+	
+	
+	<!-- 创建spring的事务 -->
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<!-- 指定数据源   引用的DataSource-->
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+	
+	
+	
+	<!-- 开启事务  tx标签是spring自带的管理器  让spring去管理事务   回滚、提交等-->
+	<tx:annotation-driven transaction-manager="transactionManager"/>
+	
+	
+</beans>
